@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StrengthCraft | v1.04 Ranked</title>
-    <!-- 核心库 -->
+    <title>StrengthCraft | v1.05 Rebalanced</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- 字体库 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
-        /* --- GLOBAL STYLE --- */
         :root {
             --bg-color: #050505; --panel-bg: #121212; --panel-border: #333;
             --text-main: #f0f0f0; --text-muted: #888;
             --accent: #39FF14; --accent-glow: rgba(57, 255, 20, 0.2);
-            --gold: #FFD700; /* 5星专用金 */
-            --danger: #ff3333; --metal-grad: linear-gradient(180deg, #444 0%, #1a1a1a 50%, #444 100%);
+            --gold: #FFD700; --danger: #ff3333; 
+            --metal-grad: linear-gradient(180deg, #444 0%, #1a1a1a 50%, #444 100%);
             --font-head: 'Rajdhani', sans-serif; --font-mono: 'Space Mono', monospace;
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
@@ -31,13 +28,11 @@
         }
         .app-shell { width: 100%; max-width: 440px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 28px; }
 
-        /* Header */
         header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid var(--panel-border); padding-bottom: 12px; }
         .brand { font-size: 32px; font-weight: 700; line-height: 1; text-transform: uppercase; letter-spacing: 2px; }
         .brand span { color: var(--accent); }
         .lang-switch { font-family: var(--font-mono); font-size: 14px; color: var(--text-muted); cursor: pointer; border: 1px solid #444; padding: 4px 8px; border-radius: 4px; transition: 0.3s; }
         
-        /* Panels */
         .panel { background: var(--panel-bg); border: 1px solid var(--panel-border); position: relative; padding: 24px; clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px); }
         .panel::before { content: ''; position: absolute; top:0; left:0; width: 30px; height: 2px; background: var(--accent); }
         .panel::after { content: ''; position: absolute; bottom:0; right:0; width: 30px; height: 2px; background: var(--accent); }
@@ -57,7 +52,6 @@
         .tab-btn.done { color: var(--accent); opacity: 0.8; }
         .tab-btn.done::before { content: '✓'; font-size: 10px; position:absolute; top:2px; right:2px; }
 
-        /* Metal Wheel */
         .ruler-wrapper { margin-bottom: 30px; position: relative; }
         .ruler-display { text-align: center; margin-bottom: 12px; }
         .ruler-value { font-family: var(--font-mono); font-size: 42px; font-weight: 700; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.15); }
@@ -73,8 +67,7 @@
         #ex-select { width: 100%; padding: 14px; background: #000; border: 1px solid #444; color: #fff; font-family: var(--font-head); font-size: 18px; margin-bottom: 24px; text-transform: uppercase; }
         .btn-mech { width: 100%; background: var(--accent); color: #000; border: none; padding: 18px; font-family: var(--font-mono); font-size: 18px; font-weight: 700; text-transform: uppercase; cursor: pointer; clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px); transition: transform 0.1s, box-shadow 0.3s; }
         .btn-mech:active { transform: scale(0.98); }
-        .btn-mech:hover { box-shadow: 0 0 25px var(--accent-glow); }
-
+        
         .hud-display { margin-top: 24px; border: 1px solid #333; background: #000; padding: 20px; display: flex; flex-direction: column; align-items: center; opacity: 0.5; transition: opacity 0.3s; }
         .hud-display.active { opacity: 1; border-color: var(--accent); }
         .hud-val { font-family: var(--font-mono); font-size: 56px; font-weight: 700; color: #fff; line-height: 1; text-shadow: 0 0 15px rgba(255,255,255,0.2); margin: 5px 0; }
@@ -83,9 +76,8 @@
 
         .chart-container { height: 260px; margin-top: 15px; }
 
-        /* REPORT MODAL */
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 999; display: none; align-items: center; justify-content: center; }
-        .report-card { background: #000; border: 1px solid #222; width: 95%; max-width: 400px; max-height: 90vh; overflow-y: auto; padding: 30px; position: relative; box-shadow: 0 0 0px rgba(0,0,0,0); }
+        .report-card { background: #000; border: 1px solid #222; width: 95%; max-width: 400px; max-height: 90vh; overflow-y: auto; padding: 30px; position: relative; }
         .report-header { text-align: left; border-bottom: 1px dashed #333; margin-bottom: 15px; padding-bottom: 10px; display:flex; justify-content:space-between; align-items:flex-end;}
         .report-title { font-size: 14px; color: #888; letter-spacing: 1px; font-family: var(--font-mono); text-transform: uppercase;}
         .report-user { font-size: 28px; color: #fff; font-weight: 800; font-family: var(--font-head); text-transform: uppercase; }
@@ -108,11 +100,9 @@
 
         .ai-section-title { color: #666; font-family: var(--font-mono); font-size: 12px; margin-bottom: 10px; text-transform: uppercase; }
         .ai-box { border: 1px solid #333; background: #050505; padding: 15px; font-family: var(--font-mono); font-size: 12px; color: #ddd; line-height: 1.8; border-left: 3px solid var(--accent); }
-        .ai-line { margin-bottom: 8px; display: block; }
         .plan-box { margin-top: 15px; border-top: 1px dashed #333; padding-top: 15px; }
         .plan-head { color: var(--accent); font-weight: bold; margin-bottom: 5px; font-size: 14px; }
         .footer-id { text-align:center; margin-top:20px; opacity:0.3; font-size:10px; font-family:var(--font-mono); text-transform: uppercase;}
-
     </style>
 </head>
 <body>
@@ -121,7 +111,7 @@
     <header>
         <div class="brand">Strength<span>Craft</span></div>
         <div class="right-header" style="text-align:right;">
-            <div class="status" style="font-size:12px; color:#555;">SYS.v1.04</div>
+            <div class="status" style="font-size:12px; color:#555;">SYS.v1.05</div>
             <div class="lang-switch" onclick="toggleLang()" id="btn-lang">EN / CN</div>
         </div>
     </header>
@@ -225,14 +215,62 @@
     window.addEventListener('click',()=>AudioEngine.init(),{once:true});window.addEventListener('touchstart',()=>AudioEngine.init(),{once:true});
 
     let curLang='cn';
-    const TEXTS={en:{lbl_profile:"User Profile",lbl_gender:"GENDER",lbl_bw:"WEIGHT (KG)",lbl_id:"CODENAME",opt_male:"MALE",opt_female:"FEMALE",lbl_input:"Input Module",lbl_reps:"REPS",tab_chest:"CHEST",tab_shoulder:"SHLDR",tab_back:"BACK",tab_legs:"LEGS",tab_arms:"ARMS",hint_bw:">> BODYWEIGHT MODE ENGAGED",lbl_weight_bb:"BARBELL TOTAL (KG)",lbl_weight_db:"ONE DUMBBELL (KG)",lbl_weight_smith:"PLATES PER SIDE (KG)",lbl_weight_add:"ADDED WEIGHT (KG)",lbl_weight_gen:"LOAD (KG)",btn_calc:"PROCESS DATA",lbl_est:"ESTIMATED 1RM",sub_conv:"CONVERTED TO",res_beat:"BEAT",res_lifters:"OF LIFTERS",lbl_chart:"PENTAGON ANALYSIS",rpt_rank:"OVERALL RANK",rpt_rating:"TOTAL RATING",rpt_ai:"AI TACTICAL ANALYSIS",lbl_plan:"RECOMMENDED PROTOCOL",btn_close:"CLOSE",btn_save:"EXPORT IMG",tiers:["NOVICE","ROOKIE","INTERMEDIATE","ADVANCED","ELITE","OLYMPIAN"]},cn:{lbl_profile:"用户档案",lbl_gender:"性别",lbl_bw:"体重 (KG)",lbl_id:"代号 / CODENAME",opt_male:"男",opt_female:"女",lbl_input:"数据录入",lbl_reps:"重复次数",tab_chest:"胸部",tab_shoulder:"肩部",tab_back:"背部",tab_legs:"腿部",tab_arms:"手臂",hint_bw:">> 已启用自重模式 (使用体重计算)",lbl_weight_bb:"杠铃总重 (杆+片)",lbl_weight_db:"单只哑铃重量",lbl_weight_smith:"单侧片重 (不含杆)",lbl_weight_add:"额外负重 (KG)",lbl_weight_gen:"使用重量",btn_calc:"计算并评级",lbl_est:"折算极限 (1RM)",sub_conv:"折算基准:",res_beat:"击败了",res_lifters:"的同级者",lbl_chart:"五维能力图谱",rpt_rank:"全服排名",rpt_rating:"总评级",rpt_ai:"AI 战术分析",lbl_plan:"推荐训练计划",btn_close:"关闭",btn_save:"保存长图",tiers:["新手 (Novice)","入门 (Rookie)","中阶 (Intermediate)","高阶 (Advanced)","精英 (Elite)","神级 (Olympian)"]}};
+    const TEXTS={en:{lbl_profile:"User Profile",lbl_gender:"GENDER",lbl_bw:"WEIGHT (KG)",lbl_id:"CODENAME",opt_male:"MALE",opt_female:"FEMALE",lbl_input:"Input Module",lbl_reps:"REPS",tab_chest:"CHEST",tab_shoulder:"SHLDR",tab_back:"BACK",tab_legs:"LEGS",tab_arms:"ARMS",hint_bw:">> BODYWEIGHT MODE ENGAGED",lbl_weight_bb:"BARBELL TOTAL (KG)",lbl_weight_db:"ONE DUMBBELL (KG)",lbl_weight_smith:"PLATES PER SIDE (KG)",lbl_weight_add:"ADDED WEIGHT (KG)",lbl_weight_gen:"LOAD (KG)",btn_calc:"PROCESS DATA",lbl_est:"ESTIMATED 1RM",sub_conv:"CONVERTED TO",res_beat:"BEAT",res_lifters:"OF LIFTERS",lbl_chart:"PENTAGON ANALYSIS",rpt_rank:"OVERALL RANK",rpt_rating:"TOTAL RATING",rpt_ai:"AI TACTICAL ANALYSIS",lbl_plan:"RECOMMENDED PROTOCOL",btn_close:"CLOSE",btn_save:"EXPORT IMG",tiers:["NOVICE","ROOKIE","INTERMEDIATE","ADVANCED","ELITE","OLYMPIAN"]},cn:{lbl_profile:"用户档案",lbl_gender:"性别",lbl_bw:"体重 (KG)",lbl_id:"代号 / CODENAME",opt_male:"男",opt_female:"女",lbl_input:"数据录入",lbl_reps:"重复次数",tab_chest:"胸部",tab_shoulder:"肩部",tab_back:"背部",tab_legs:"腿部",tab_arms:"手臂",hint_bw:">> 已启用自重模式 (使用体重计算)",lbl_weight_bb:"杠铃总重 (杆+片)",lbl_weight_db:"单只哑铃重量",lbl_weight_smith:"单侧片重 (不含杆)",lbl_weight_add:"额外负重 (KG)",lbl_weight_gen:"使用重量",btn_calc:"计算并评级",lbl_est:"折算极限 (1RM)",sub_conv:"折算基准:",res_beat:"击败了",res_lifters:"的同级者",lbl_chart:"五维能力图谱",rpt_rank:"全服排名",rpt_rating:"总评级",rpt_ai:"AI TACTICAL ANALYSIS",lbl_plan:"推荐训练计划",btn_close:"关闭",btn_save:"保存长图",tiers:["新手","入门","中阶","高阶","精英","神级"]}};
 
+    // --- DB V1.05 ADJUSTED ---
     const DB={
-        chest:[{id:'bp',name:{en:'Barbell Bench Press',cn:'杠铃平板卧推'},type:'bb',ratio:1.0,anchor:'bench'},{id:'bp_inc',name:{en:'Incline Barbell Bench',cn:'上斜杠铃卧推'},type:'bb',ratio:1.25,anchor:'bench'},{id:'bp_sm',name:{en:'Smith Machine Bench',cn:'史密斯机卧推'},type:'smith',ratio:0.9,anchor:'bench'},{id:'db_bp',name:{en:'Dumbbell Bench Press',cn:'哑铃平板卧推'},type:'db',ratio:1.2,anchor:'bench'},{id:'db_inc',name:{en:'Incline DB Press',cn:'上斜哑铃卧推'},type:'db',ratio:1.35,anchor:'bench'},{id:'pushup',name:{en:'Standard Pushup',cn:'标准俯卧撑'},type:'bw',factor:0.65,ratio:0.85,anchor:'bench'},{id:'dips',name:{en:'Chest Dips',cn:'双杠臂屈伸'},type:'bw',factor:0.95,ratio:0.85,anchor:'bench'},{id:'mach_press',name:{en:'Machine Chest Press',cn:'固定器械推胸'},type:'mach',ratio:0.8,anchor:'bench'}],
-        shoulder:[{id:'ohp',name:{en:'Overhead Press',cn:'站姿杠铃推举'},type:'bb',ratio:1.0,anchor:'ohp'},{id:'ohp_sm',name:{en:'Smith Overhead Press',cn:'史密斯机推举'},type:'smith',ratio:0.85,anchor:'ohp'},{id:'db_ohp',name:{en:'DB Seated Press',cn:'坐姿哑铃推举'},type:'db',ratio:1.1,anchor:'ohp'},{id:'arnold',name:{en:'Arnold Press',cn:'阿诺德推举'},type:'db',ratio:1.2,anchor:'ohp'},{id:'mach_sh',name:{en:'Machine Shoulder Press',cn:'固定器械推肩'},type:'mach',ratio:0.7,anchor:'ohp'},{id:'hspu',name:{en:'Handstand Pushup',cn:'贴墙倒立撑'},type:'bw',factor:0.95,ratio:1.1,anchor:'ohp'},{id:'pike',name:{en:'Pike Pushup',cn:'折刀俯卧撑'},type:'bw',factor:0.6,ratio:0.6,anchor:'ohp'}],
-        back:[{id:'dl',name:{en:'Deadlift',cn:'传统硬拉'},type:'bb',ratio:1.0,anchor:'dl'},{id:'sumo',name:{en:'Sumo Deadlift',cn:'相扑硬拉'},type:'bb',ratio:1.0,anchor:'dl'},{id:'pullup_bw',name:{en:'Pull Up (BW)',cn:'自重引体向上'},type:'bw',factor:1.0,ratio:1.2,anchor:'pull'},{id:'pullup_w',name:{en:'Weighted Pull Up',cn:'负重引体向上'},type:'weighted_bw',ratio:1.3,anchor:'pull'},{id:'chinup_bw',name:{en:'Chin Up (BW)',cn:'自重反手引体'},type:'bw',factor:1.0,ratio:1.15,anchor:'pull'},{id:'chinup_w',name:{en:'Weighted Chin Up',cn:'负重反手引体'},type:'weighted_bw',ratio:1.25,anchor:'pull'},{id:'row',name:{en:'Barbell Row',cn:'杠铃划船'},type:'bb',ratio:1.3,anchor:'pull'},{id:'db_row',name:{en:'One-Arm DB Row',cn:'单臂哑铃划船'},type:'db',ratio:1.2,anchor:'pull'},{id:'lat',name:{en:'Lat Pulldown',cn:'高位下拉'},type:'mach',ratio:0.65,anchor:'pull'},{id:'cable_row',name:{en:'Seated Cable Row',cn:'坐姿绳索划船'},type:'mach',ratio:0.7,anchor:'pull'}],
-        legs:[{id:'sq',name:{en:'Back Squat',cn:'颈后深蹲'},type:'bb',ratio:1.0,anchor:'sq'},{id:'ft_sq',name:{en:'Front Squat',cn:'颈前深蹲'},type:'bb',ratio:1.15,anchor:'sq'},{id:'sq_sm',name:{en:'Smith Machine Squat',cn:'史密斯机深蹲'},type:'smith',ratio:0.95,anchor:'sq'},{id:'lp',name:{en:'Leg Press',cn:'倒蹬/腿举'},type:'mach',ratio:0.35,anchor:'sq'},{id:'ext',name:{en:'Leg Extension',cn:'坐姿腿屈伸'},type:'mach',ratio:0.4,anchor:'sq'},{id:'lunge',name:{en:'DB Lunge',cn:'哑铃箭步蹲'},type:'db',ratio:1.6,anchor:'sq'},{id:'goblet',name:{en:'Goblet Squat',cn:'高脚杯深蹲'},type:'db',ratio:0.8,anchor:'sq'}],
-        arms:[{id:'curl',name:{en:'Barbell Curl',cn:'杠铃弯举'},type:'bb',ratio:1.0,anchor:'curl'},{id:'db_curl',name:{en:'Dumbbell Curl',cn:'哑铃弯举'},type:'db',ratio:0.95,anchor:'curl'},{id:'cg_bp',name:{en:'Close-Grip Bench',cn:'窄距卧推 (三头)'},type:'bb',ratio:0.45,anchor:'curl'},{id:'skull',name:{en:'Skullcrushers',cn:'仰卧臂屈伸'},type:'bb',ratio:0.6,anchor:'curl'},{id:'tri',name:{en:'Tricep Pushdown',cn:'绳索下压'},type:'mach',ratio:0.5,anchor:'curl'},{id:'diamond',name:{en:'Diamond Pushup',cn:'钻石俯卧撑'},type:'bw',factor:0.65,ratio:0.5,anchor:'curl'},{id:'bench_dip',name:{en:'Bench Dips',cn:'板凳臂屈伸'},type:'bw',factor:0.5,ratio:0.4,anchor:'curl'}]
+        chest:[
+            {id:'bp',name:{en:'Barbell Bench Press',cn:'杠铃平板卧推'},type:'bb',ratio:1.0,anchor:'bench'},
+            {id:'bp_inc',name:{en:'Incline Barbell Bench',cn:'上斜杠铃卧推'},type:'bb',ratio:1.25,anchor:'bench'}, 
+            {id:'bp_sm',name:{en:'Smith Machine Bench',cn:'史密斯机卧推'},type:'smith',ratio:0.9,anchor:'bench'}, 
+            {id:'db_bp',name:{en:'Dumbbell Bench Press',cn:'哑铃平板卧推'},type:'db',ratio:1.2,anchor:'bench'}, 
+            {id:'db_inc',name:{en:'Incline DB Press',cn:'上斜哑铃卧推'},type:'db',ratio:1.35,anchor:'bench'},
+            {id:'pushup',name:{en:'Standard Pushup',cn:'标准俯卧撑'},type:'bw',factor:0.65,ratio:0.85,anchor:'bench'}, 
+            {id:'dips',name:{en:'Chest Dips',cn:'双杠臂屈伸'},type:'bw',factor:0.95,ratio:0.85,anchor:'bench'},
+            {id:'mach_press',name:{en:'Machine Chest Press',cn:'固定器械推胸'},type:'mach',ratio:0.8,anchor:'bench'}
+        ],
+        shoulder:[
+            {id:'ohp',name:{en:'Overhead Press',cn:'站姿杠铃推举'},type:'bb',ratio:1.0,anchor:'ohp'},
+            {id:'ohp_sm',name:{en:'Smith Overhead Press',cn:'史密斯机推举'},type:'smith',ratio:0.85,anchor:'ohp'},
+            {id:'db_ohp',name:{en:'DB Seated Press',cn:'坐姿哑铃推举'},type:'db',ratio:1.1,anchor:'ohp'},
+            {id:'arnold',name:{en:'Arnold Press',cn:'阿诺德推举'},type:'db',ratio:1.2,anchor:'ohp'},
+            {id:'mach_sh',name:{en:'Machine Shoulder Press',cn:'固定器械推肩'},type:'mach',ratio:0.7,anchor:'ohp'},
+            {id:'hspu',name:{en:'Handstand Pushup',cn:'贴墙倒立撑'},type:'bw',factor:0.95,ratio:1.1,anchor:'ohp'},
+            {id:'pike',name:{en:'Pike Pushup',cn:'折刀俯卧撑'},type:'bw',factor:0.6,ratio:0.6,anchor:'ohp'}
+        ],
+        back:[
+            // NEW BACK ANCHOR: BARBELL ROW
+            {id:'row',name:{en:'Barbell Row',cn:'杠铃划船'},type:'bb',ratio:1.0,anchor:'row'}, 
+            {id:'pullup_bw',name:{en:'Pull Up (Bodyweight)',cn:'自重引体向上'},type:'bw',factor:1.0,ratio:0.95,anchor:'row'}, 
+            {id:'pullup_w',name:{en:'Weighted Pull Up',cn:'负重引体向上'},type:'weighted_bw',ratio:1.0,anchor:'row'}, 
+            {id:'chinup_bw',name:{en:'Chin Up (Bodyweight)',cn:'自重反手引体'},type:'bw',factor:1.0,ratio:0.9,anchor:'row'}, 
+            {id:'chinup_w',name:{en:'Weighted Chin Up',cn:'负重反手引体'},type:'weighted_bw',ratio:0.95,anchor:'row'}, 
+            {id:'db_row',name:{en:'One-Arm DB Row',cn:'单臂哑铃划船'},type:'db',ratio:0.9,anchor:'row'}, 
+            {id:'sm_row',name:{en:'Smith Machine Row',cn:'史密斯划船'},type:'smith',ratio:0.85,anchor:'row'}, 
+            {id:'lat',name:{en:'Lat Pulldown',cn:'高位下拉'},type:'mach',ratio:0.6,anchor:'row'},
+            {id:'cable_row',name:{en:'Seated Cable Row',cn:'坐姿绳索划船'},type:'mach',ratio:0.75,anchor:'row'}
+        ],
+        legs:[
+            // DEADLIFT MOVED HERE
+            {id:'sq',name:{en:'Back Squat',cn:'颈后深蹲'},type:'bb',ratio:1.0,anchor:'sq'},
+            {id:'dl',name:{en:'Deadlift',cn:'传统硬拉'},type:'bb',ratio:1.0,anchor:'dl'},
+            {id:'sumo',name:{en:'Sumo Deadlift',cn:'相扑硬拉'},type:'bb',ratio:1.0,anchor:'dl'},
+            {id:'ft_sq',name:{en:'Front Squat',cn:'颈前深蹲'},type:'bb',ratio:1.15,anchor:'sq'},
+            {id:'sq_sm',name:{en:'Smith Machine Squat',cn:'史密斯机深蹲'},type:'smith',ratio:0.95,anchor:'sq'},
+            {id:'lp',name:{en:'Leg Press',cn:'倒蹬/腿举'},type:'mach',ratio:0.35,anchor:'sq'},
+            {id:'ext',name:{en:'Leg Extension',cn:'坐姿腿屈伸'},type:'mach',ratio:0.4,anchor:'sq'},
+            {id:'lunge',name:{en:'DB Lunge',cn:'哑铃箭步蹲'},type:'db',ratio:1.6,anchor:'sq'},
+            {id:'goblet',name:{en:'Goblet Squat',cn:'高脚杯深蹲'},type:'db',ratio:0.8,anchor:'sq'}
+        ],
+        arms:[
+            {id:'curl',name:{en:'Barbell Curl',cn:'杠铃弯举'},type:'bb',ratio:1.0,anchor:'curl'},
+            {id:'db_curl',name:{en:'Dumbbell Curl',cn:'哑铃弯举'},type:'db',ratio:0.95,anchor:'curl'},
+            {id:'cg_bp',name:{en:'Close-Grip Bench',cn:'窄距卧推 (三头)'},type:'bb',ratio:0.45,anchor:'curl'}, 
+            {id:'skull',name:{en:'Skullcrushers',cn:'仰卧臂屈伸'},type:'bb',ratio:0.6,anchor:'curl'},
+            {id:'tri',name:{en:'Tricep Pushdown',cn:'绳索下压'},type:'mach',ratio:0.5,anchor:'curl'},
+            {id:'diamond',name:{en:'Diamond Pushup',cn:'钻石俯卧撑'},type:'bw',factor:0.65,ratio:0.5,anchor:'curl'},
+            {id:'bench_dip',name:{en:'Bench Dips',cn:'板凳臂屈伸'},type:'bw',factor:0.5,ratio:0.4,anchor:'curl'}
+        ]
     };
 
     const PLAN_LIBRARY={novice:{en:{title:"StrongLifts 5x5",desc:"Focus on compound lifts (Squat, Bench, Deadlift). 3x/week, linear progression."},cn:{title:"5x5 线性力量计划",desc:"专注于深蹲、卧推、硬拉三大项。每周3练，重量每次增加 2.5kg，打好力量基础。"}},pushpull:{en:{title:"PPL Split",desc:"Push/Pull/Legs high volume split to fix imbalances."},cn:{title:"PPL 推拉腿分化",desc:"高容量体系。Day1:胸肩; Day2:背二头; Day3:腿部。适合改善肌肉失衡。"}},squat_focus:{en:{title:"Smolov Jr (Legs)",desc:"High frequency squat program (4x/week). Intense."},cn:{title:"斯莫洛夫深蹲导入",desc:"针对下肢薄弱的高频计划。每周4次深蹲，强度极高，需注意恢复。"}},balanced:{en:{title:"PHUL Power/Hypertrophy",desc:"4 day split mixing strength and size work."},cn:{title:"PHUL 力量肌肥大分化",desc:"上肢力量/下肢力量/上肢肌肥大/下肢肌肥大。每周4练，兼顾力量与形态。"}},elite:{en:{title:"GZCLP Periodization",desc:"Tiered training (T1/T2/T3) for elite lifters."},cn:{title:"GZCLP 周期化训练",desc:"以T1大重量、T2中重量、T3辅助动作划分层级，适合精英突破瓶颈。"}}};
@@ -241,7 +279,14 @@
 
     const weightRuler=new RulerPicker('rw-weight','rs-weight','val-weight',300,40,2.5);
     const repsRuler=new RulerPicker('rw-reps','rs-reps','val-reps',50,5,1);
-    const STD={male:{bench:[0.5,1.9],ohp:[0.35,1.15],dl:[1.0,3.0],sq:[0.75,2.75],curl:[0.2,0.75],pull:[0.7, 2.2]},female:{bench:[0.3,1.1],ohp:[0.25,0.75],dl:[0.75,2.1],sq:[0.5,1.8],curl:[0.1,0.45],pull:[0.4, 1.2]}};
+    
+    // --- UPDATED STANDARDS v1.05 (Harder) ---
+    // OHP Elite bumped to 1.35x. DL bumped to 3.3x.
+    // Back Anchor is now ROW (Barbell Row). Elite Row approx 1.6x BW.
+    const STD={
+        male:{bench:[0.5,2.0],ohp:[0.4,1.35],dl:[1.0,3.3],sq:[0.8,3.0],curl:[0.2,0.75],row:[0.6, 1.7]},
+        female:{bench:[0.3,1.2],ohp:[0.25,0.85],dl:[0.8,2.4],sq:[0.5,2.0],curl:[0.1,0.45],row:[0.4, 1.1]}
+    };
     let state={chest:{s:0,d:false},shoulder:{s:0,d:false},back:{s:0,d:false},legs:{s:0,d:false},arms:{s:0,d:false}};
     let currentPart='chest';
 
@@ -254,13 +299,13 @@
     function switchPart(p){currentPart=p;document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(`btn-${p}`).classList.add('active');const sel=document.getElementById('ex-select');sel.innerHTML='';DB[p].forEach(e=>{let opt=document.createElement('option');opt.value=e.id;opt.innerText=e.name[curLang];sel.appendChild(opt);});updateUI();}
     function updateUI(){const id=document.getElementById('ex-select').value,ex=DB[currentPart].find(e=>e.id===id),w=document.getElementById('ruler-weight-box'),h=document.getElementById('bw-hint'),l=document.getElementById('label-weight'),t=TEXTS[curLang];if(ex.type==='bw'){w.style.display='none';h.style.display='block';}else{w.style.display='block';h.style.display='none';if(ex.type==='bb')l.innerText=t.lbl_weight_bb;else if(ex.type==='db')l.innerText=t.lbl_weight_db;else if(ex.type==='smith')l.innerText=t.lbl_weight_smith;else if(ex.type==='weighted_bw')l.innerText=t.lbl_weight_add;else l.innerText=t.lbl_weight_gen;}}
     
-    // --- UPDATED RATING LOGIC v1.04 ---
+    // --- SCORING v1.05 ---
     function getStarCount(score) {
-        if(score < 40) return 1;
-        if(score < 55) return 2;
-        if(score < 70) return 3; // < 70 is 3 stars.
-        if(score < 85) return 4; // 70-84 is 4 stars.
-        return 5; // 85+ is 5 stars.
+        if(score < 45) return 1;
+        if(score < 65) return 2;
+        if(score < 85) return 3; // Wider Intermediate Range
+        if(score < 95) return 4; // Harder Advanced
+        return 5; // Top 5%
     }
 
     function calculate(){
@@ -277,14 +322,12 @@
         
         const hud=document.getElementById('hud-res'),t=TEXTS[curLang];hud.classList.add('active');
         document.getElementById('res-val').innerText=Math.round(stdRM);
-        document.getElementById('res-sub').innerText=(ex.anchor==='pull'?(curLang==='cn'?'折算引体基准':'CONVERTED TO PULL'):`${t.sub_conv} ${ex.anchor.toUpperCase()}`);
+        document.getElementById('res-sub').innerText=(ex.anchor==='row'?(curLang==='cn'?'折算划船基准':'CONVERTED TO ROW'):`${t.sub_conv} ${ex.anchor.toUpperCase()}`);
         
-        let rawPct=(score-18)*1.22; if(gender==='female')rawPct*=1.5; // Female Bonus 1.5x
+        let rawPct=(score-18)*1.22; if(gender==='female')rawPct*=1.5; 
         let pct=Math.min(99.9,Math.max(1,rawPct)).toFixed(1);
         
         document.getElementById('res-rank').innerText=`${t.res_beat} ${pct}% ${gender==='female'?'(General Pop.)':t.res_lifters}`;
-        
-        // Use New Star Logic
         let starCount = getStarCount(score);
         document.getElementById('res-stars').innerText="★".repeat(starCount);
         
@@ -299,17 +342,15 @@
         let scores = Object.values(state).map(v => v.s);
         let avg = scores.reduce((a, b) => a + b, 0) / 5;
         let gender = document.getElementById('gender').value;
-        
         let rawPct = (avg - 20) * 1.2; if (gender === 'female') rawPct = rawPct * 1.5;
         let pct = Math.min(99, Math.max(5, rawPct)).toFixed(1);
         
-        // Dynamic Tier
         let tIdx = 0;
-        if(avg >= 85) tIdx = 5; // Olympian
-        else if(avg >= 70) tIdx = 4; // Elite
-        else if(avg >= 55) tIdx = 3; // Advanced
-        else if(avg >= 40) tIdx = 2; // Intermediate
-        else tIdx = 1; // Rookie
+        if(avg >= 95) tIdx = 5; 
+        else if(avg >= 85) tIdx = 4; 
+        else if(avg >= 65) tIdx = 3; 
+        else if(avg >= 45) tIdx = 2; 
+        else tIdx = 1; 
 
         document.getElementById('rpt-user-id').innerText = (document.getElementById('user-id').value || "UNKNOWN").toUpperCase();
         document.getElementById('rpt-tier').innerText = t.tiers[tIdx];
@@ -318,7 +359,6 @@
         let totalStars = getStarCount(avg);
         document.getElementById('rpt-stars').innerText = "★".repeat(totalStars);
 
-        // Generate Image from Main Chart
         const chartImgData = mainChart.toBase64Image();
         document.getElementById('modal-chart-img').src = chartImgData;
 
@@ -362,10 +402,10 @@
             analysis.push(isCN ? ">> 推拉比失调：背部力量占优，但推举能力不足。" : ">> PUSH DEFICIENCY: Back strength exceeds pushing power.");
         }
 
-        if (avg >= 85) {
-            analysis.push(isCN ? ">> 综合评价：神级水平！你的力量已经超越绝大多数人类，建议进行更专业的周期化训练。" : ">> SUMMARY: Olympian level. Diminishing returns active. Periodization required.");
+        if (avg >= 95) {
+            analysis.push(isCN ? ">> 综合评价：神级水平！你的力量已经超越绝大多数人类。" : ">> SUMMARY: Olympian level. Diminishing returns active.");
             planKey = 'elite';
-        } else if (avg < 40) {
+        } else if (avg < 45) {
             analysis.push(isCN ? ">> 综合评价：力量构建初期。专注于复合动作线性加重。" : ">> SUMMARY: Foundation phase. Focus on linear progression.");
             planKey = 'novice';
         } else {
@@ -373,7 +413,6 @@
         }
 
         document.getElementById('ai-content').innerHTML = analysis.map(line => `<span class="ai-line">${line}</span>`).join('');
-        
         const plan = PLAN_LIBRARY[planKey][curLang];
         document.getElementById('ai-plan-text').innerHTML = `<strong style="color:#fff">${plan.title}</strong><br>${plan.desc}`;
     }
