@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StrengthCraft | v1.31 Final</title>
+    <title>StrengthCraft | v1.32 Hotfix</title>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- HTML2Canvas -->
@@ -90,13 +90,7 @@
         .report-card, .feedback-card { background: #000; border: 1px solid #222; width: 95%; max-width: 400px; position: relative; padding: 30px; }
         .report-card { max-height: 90vh; overflow-y: auto; }
         
-        /* Feedback Card */
-        .feedback-card { 
-            display: flex; flex-direction: column; gap: 15px; 
-            border: 1px solid var(--accent); 
-            box-shadow: 0 0 30px rgba(57, 255, 20, 0.15); 
-            z-index: 1001;
-        }
+        .feedback-card { display: flex; flex-direction: column; gap: 15px; border: 1px solid var(--accent); box-shadow: 0 0 30px rgba(57, 255, 20, 0.15); z-index: 1001; }
         .fb-textarea { width: 100%; height: 100px; background: #111; border: 1px solid #333; color: #fff; padding: 10px; font-family: var(--font-mono); font-size: 14px; resize: none; margin-top: 10px; }
         
         .report-header { text-align: left; border-bottom: 1px dashed #333; margin-bottom: 15px; padding-bottom: 10px; display:flex; justify-content:space-between; align-items:flex-end;}
@@ -134,7 +128,7 @@
     <header>
         <div class="brand">Strength<span>Craft</span></div>
         <div class="right-header" style="text-align:right;">
-            <div class="status" style="font-size:12px; color:#555;">SYS.v1.31</div>
+            <div class="status" style="font-size:12px; color:#555;">SYS.v1.32</div>
             <div class="lang-switch" onclick="toggleLang()" id="btn-lang">EN / CN</div>
         </div>
     </header>
@@ -282,14 +276,57 @@
         }
     };
 
-    const DB={chest:[{id:'bp',name:{en:'Barbell Bench Press',cn:'杠铃平板卧推'},type:'bb',ratio:1.0,anchor:'bench'},{id:'bp_inc',name:{en:'Incline Barbell Bench',cn:'上斜杠铃卧推'},type:'bb',ratio:1.25,anchor:'bench'},{id:'bp_sm',name:{en:'Smith Machine Bench',cn:'史密斯机卧推'},type:'smith',ratio:0.9,anchor:'bench'},{id:'db_bp',name:{en:'Dumbbell Bench Press',cn:'哑铃平板卧推'},type:'db',ratio:1.2,anchor:'bench'},{id:'db_inc',name:{en:'Incline DB Press',cn:'上斜哑铃卧推'},type:'db',ratio:1.35,anchor:'bench'},{id:'pushup',name:{en:'Standard Pushup',cn:'标准俯卧撑'},type:'bw',factor:0.65,ratio:0.85,anchor:'bench'},{id:'dips',name:{en:'Chest Dips',cn:'双杠臂屈伸'},type:'bw',factor:0.95,ratio:0.85,anchor:'bench'},{id:'mach_press',name:{en:'Machine Chest Press',cn:'固定器械推胸'},type:'mach',ratio:0.8,anchor:'bench'}],shoulder:[{id:'ohp',name:{en:'Overhead Press',cn:'站姿杠铃推举'},type:'bb',ratio:1.0,anchor:'ohp'},{id:'ohp_sm',name:{en:'Smith Overhead Press',cn:'史密斯机推举'},type:'smith',ratio:0.85,anchor:'ohp'},{id:'db_ohp',name:{en:'DB Seated Press',cn:'坐姿哑铃推举'},type:'db',ratio:1.1,anchor:'ohp'},{id:'arnold',name:{en:'Arnold Press',cn:'阿诺德推举'},type:'db',ratio:1.2,anchor:'ohp'},{id:'mach_sh',name:{en:'Machine Shoulder Press',cn:'固定器械推肩'},type:'mach',ratio:0.7,anchor:'ohp'},{id:'hspu',name:{en:'Handstand Pushup',cn:'贴墙倒立撑'},type:'bw',factor:0.95,ratio:1.1,anchor:'ohp'},{id:'pike',name:{en:'Pike Pushup',cn:'折刀俯卧撑'},type:'bw',factor:0.6,ratio:0.6,anchor:'ohp'}],back:[{id:'dl',name:{en:'Deadlift',cn:'传统硬拉'},type:'bb',ratio:1.0,anchor:'dl'},{id:'sumo',name:{en:'Sumo Deadlift',cn:'相扑硬拉'},type:'bb',ratio:1.0,anchor:'dl'},{id:'pullup_bw',name:{en:'Pull Up (Bodyweight)',cn:'自重引体向上'},type:'bw',factor:1.0,ratio:1.2,anchor:'pull'},{id:'pullup_w',name:{en:'Weighted Pull Up',cn:'负重引体向上'},type:'weighted_bw',ratio:1.3,anchor:'pull'},{id:'chinup_bw',name:{en:'Chin Up (Bodyweight)',cn:'自重反手引体'},type:'bw',factor:1.0,ratio:1.15,anchor:'pull'},{id:'chinup_w',name:{en:'Weighted Chin Up',cn:'负重反手引体'},type:'weighted_bw',ratio:1.25,anchor:'pull'},{id:'row',name:{en:'Barbell Row',cn:'杠铃划船'},type:'bb',ratio:1.3,anchor:'pull'},{id:'db_row',name:{en:'One-Arm DB Row',cn:'单臂哑铃划船'},type:'db',ratio:1.2,anchor:'pull'},{id:'lat',name:{en:'Lat Pulldown',cn:'高位下拉'},type:'mach',ratio:0.65,anchor:'pull'},{id:'cable_row',name:{en:'Seated Cable Row',cn:'坐姿绳索划船'},type:'mach',ratio:0.7,anchor:'pull'}],legs:[{id:'sq',name:{en:'Back Squat',cn:'颈后深蹲'},type:'bb',ratio:1.0,anchor:'sq'},{id:'ft_sq',name:{en:'Front Squat',cn:'颈前深蹲'},type:'bb',ratio:1.15,anchor:'sq'},{id:'sq_sm',name:{en:'Smith Machine Squat',cn:'史密斯机深蹲'},type:'smith',ratio:0.95,anchor:'sq'},{id:'lp',name:{en:'Leg Press',cn:'倒蹬/腿举'},type:'mach',ratio:0.35,anchor:'sq'},{id:'ext',name:{en:'Leg Extension',cn:'坐姿腿屈伸'},type:'mach',ratio:0.4,anchor:'sq'},{id:'lunge',name:{en:'DB Lunge',cn:'哑铃箭步蹲'},type:'db',ratio:1.6,anchor:'sq'},{id:'goblet',name:{en:'Goblet Squat',cn:'高脚杯深蹲'},type:'db',ratio:0.8,anchor:'sq'}],arms:[{id:'curl',name:{en:'Barbell Curl',cn:'杠铃弯举'},type:'bb',ratio:1.0,anchor:'curl'},{id:'db_curl',name:{en:'Dumbbell Curl',cn:'哑铃弯举'},type:'db',ratio:0.95,anchor:'curl'},{id:'cg_bp',name:{en:'Close-Grip Bench',cn:'窄距卧推 (三头)'},type:'bb',ratio:0.45,anchor:'curl'},{id:'skull',name:{en:'Skullcrushers',cn:'仰卧臂屈伸'},type:'bb',ratio:0.6,anchor:'curl'},{id:'tri',name:{en:'Tricep Pushdown',cn:'绳索下压'},type:'mach',ratio:0.5,anchor:'curl'},{id:'diamond',name:{en:'Diamond Pushup',cn:'钻石俯卧撑'},type:'bw',factor:0.65,ratio:0.5,anchor:'curl'},{id:'bench_dip',name:{en:'Bench Dips',cn:'板凳臂屈伸'},type:'bw',factor:0.5,ratio:0.4,anchor:'curl'}]};
+    // --- 5. DATA (DB FIXED) ---
+    const DB={
+        chest:[{id:'bp',name:{en:'Barbell Bench Press',cn:'杠铃平板卧推'},type:'bb',ratio:1.0,anchor:'bench'},{id:'bp_inc',name:{en:'Incline Barbell Bench',cn:'上斜杠铃卧推'},type:'bb',ratio:1.25,anchor:'bench'},{id:'bp_sm',name:{en:'Smith Machine Bench',cn:'史密斯机卧推'},type:'smith',ratio:0.9,anchor:'bench'},{id:'db_bp',name:{en:'Dumbbell Bench Press',cn:'哑铃平板卧推'},type:'db',ratio:1.2,anchor:'bench'},{id:'db_inc',name:{en:'Incline DB Press',cn:'上斜哑铃卧推'},type:'db',ratio:1.35,anchor:'bench'},{id:'pushup',name:{en:'Standard Pushup',cn:'标准俯卧撑'},type:'bw',factor:0.65,ratio:0.85,anchor:'bench'},{id:'dips',name:{en:'Chest Dips',cn:'双杠臂屈伸'},type:'bw',factor:0.95,ratio:0.85,anchor:'bench'},{id:'mach_press',name:{en:'Machine Chest Press',cn:'固定器械推胸'},type:'mach',ratio:0.8,anchor:'bench'}],
+        shoulder:[{id:'ohp',name:{en:'Overhead Press',cn:'站姿杠铃推举'},type:'bb',ratio:1.0,anchor:'ohp'},{id:'ohp_sm',name:{en:'Smith Overhead Press',cn:'史密斯机推举'},type:'smith',ratio:0.85,anchor:'ohp'},{id:'db_ohp',name:{en:'DB Seated Press',cn:'坐姿哑铃推举'},type:'db',ratio:1.1,anchor:'ohp'},{id:'arnold',name:{en:'Arnold Press',cn:'阿诺德推举'},type:'db',ratio:1.2,anchor:'ohp'},{id:'mach_sh',name:{en:'Machine Shoulder Press',cn:'固定器械推肩'},type:'mach',ratio:0.7,anchor:'ohp'},{id:'hspu',name:{en:'Handstand Pushup',cn:'贴墙倒立撑'},type:'bw',factor:0.95,ratio:1.1,anchor:'ohp'},{id:'pike',name:{en:'Pike Pushup',cn:'折刀俯卧撑'},type:'bw',factor:0.6,ratio:0.6,anchor:'ohp'}],
+        back:[
+            // DEADLIFT REMOVED FROM BACK
+            // ROW / PULL ANCHORS
+            {id:'row',name:{en:'Barbell Row',cn:'杠铃划船'},type:'bb',ratio:1.0,anchor:'row'}, 
+            {id:'pullup_bw',name:{en:'Pull Up (BW)',cn:'自重引体向上'},type:'bw',factor:1.0,ratio:0.95,anchor:'row'}, 
+            {id:'pullup_w',name:{en:'Weighted Pull Up',cn:'负重引体向上'},type:'weighted_bw',ratio:1.0,anchor:'row'}, 
+            {id:'chinup_bw',name:{en:'Chin Up (BW)',cn:'自重反手引体'},type:'bw',factor:1.0,ratio:0.9,anchor:'row'}, 
+            {id:'chinup_w',name:{en:'Weighted Chin Up',cn:'负重反手引体'},type:'weighted_bw',ratio:0.95,anchor:'row'}, 
+            {id:'db_row',name:{en:'One-Arm DB Row',cn:'单臂哑铃划船'},type:'db',ratio:0.9,anchor:'row'}, 
+            {id:'sm_row',name:{en:'Smith Machine Row',cn:'史密斯划船'},type:'smith',ratio:0.85,anchor:'row'}, 
+            {id:'lat',name:{en:'Lat Pulldown',cn:'高位下拉'},type:'mach',ratio:0.6,anchor:'row'},
+            {id:'cable_row',name:{en:'Seated Cable Row',cn:'坐姿绳索划船'},type:'mach',ratio:0.75,anchor:'row'}
+        ],
+        legs:[
+            {id:'sq',name:{en:'Back Squat',cn:'颈后深蹲'},type:'bb',ratio:1.0,anchor:'sq'},
+            {id:'dl',name:{en:'Deadlift',cn:'传统硬拉'},type:'bb',ratio:1.0,anchor:'dl'}, // DL ADDED HERE
+            {id:'sumo',name:{en:'Sumo Deadlift',cn:'相扑硬拉'},type:'bb',ratio:1.0,anchor:'dl'}, // SUMO ADDED HERE
+            {id:'ft_sq',name:{en:'Front Squat',cn:'颈前深蹲'},type:'bb',ratio:1.15,anchor:'sq'},
+            {id:'sq_sm',name:{en:'Smith Machine Squat',cn:'史密斯机深蹲'},type:'smith',ratio:0.95,anchor:'sq'},
+            {id:'lp',name:{en:'Leg Press',cn:'倒蹬/腿举'},type:'mach',ratio:0.35,anchor:'sq'},
+            {id:'ext',name:{en:'Leg Extension',cn:'坐姿腿屈伸'},type:'mach',ratio:0.4,anchor:'sq'},
+            {id:'lunge',name:{en:'DB Lunge',cn:'哑铃箭步蹲'},type:'db',ratio:1.6,anchor:'sq'},
+            {id:'goblet',name:{en:'Goblet Squat',cn:'高脚杯深蹲'},type:'db',ratio:0.8,anchor:'sq'}
+        ],
+        arms:[
+            {id:'curl',name:{en:'Barbell Curl',cn:'杠铃弯举'},type:'bb',ratio:1.0,anchor:'curl'},
+            {id:'db_curl',name:{en:'Dumbbell Curl',cn:'哑铃弯举'},type:'db',ratio:0.95,anchor:'curl'},
+            {id:'cg_bp',name:{en:'Close-Grip Bench',cn:'窄距卧推 (三头)'},type:'bb',ratio:0.45,anchor:'curl'}, 
+            {id:'skull',name:{en:'Skullcrushers',cn:'仰卧臂屈伸'},type:'bb',ratio:0.6,anchor:'curl'},
+            {id:'tri',name:{en:'Tricep Pushdown',cn:'绳索下压'},type:'mach',ratio:0.5,anchor:'curl'},
+            {id:'diamond',name:{en:'Diamond Pushup',cn:'钻石俯卧撑'},type:'bw',factor:0.65,ratio:0.5,anchor:'curl'},
+            {id:'bench_dip',name:{en:'Bench Dips',cn:'板凳臂屈伸'},type:'bw',factor:0.5,ratio:0.4,anchor:'curl'}
+        ]
+    };
+
     const PLAN_LIBRARY={novice:{en:{title:"StrongLifts 5x5",desc:"Focus on compound lifts (Squat, Bench, Deadlift). 3x/week, linear progression."},cn:{title:"5x5 线性力量计划",desc:"专注于深蹲、卧推、硬拉三大项。每周3练，重量每次增加 2.5kg，打好力量基础。"}},pushpull:{en:{title:"PPL Split",desc:"Push/Pull/Legs high volume split to fix imbalances."},cn:{title:"PPL 推拉腿分化",desc:"高容量体系。Day1:胸肩; Day2:背二头; Day3:腿部。适合改善肌肉失衡。"}},squat_focus:{en:{title:"Smolov Jr (Legs)",desc:"High frequency squat program (4x/week). Intense."},cn:{title:"斯莫洛夫深蹲导入",desc:"针对下肢薄弱的高频计划。每周4次深蹲，强度极高，需注意恢复。"}},balanced:{en:{title:"PHUL Power/Hypertrophy",desc:"4 day split mixing strength and size work."},cn:{title:"PHUL 力量肌肥大分化",desc:"上肢力量/下肢力量/上肢肌肥大/下肢肌肥大。每周4练，兼顾力量与形态。"}},elite:{en:{title:"GZCLP Periodization",desc:"Tiered training (T1/T2/T3) for elite lifters."},cn:{title:"GZCLP 周期化训练",desc:"以T1大重量、T2中重量、T3辅助动作划分层级，适合精英突破瓶颈。"}}};
 
     class RulerPicker{constructor(c,s,d,m,v,st){this.w=document.getElementById(c);this.s=document.getElementById(s);this.d=document.getElementById(d);this.max=m;this.step=st;this.val=v;this.uW=14;this.init();}init(){let h='';for(let i=0;i<=this.max;i+=this.step){let m=(i%(this.step*10)===0)||(this.max<50&&i%5===0);h+=`<div class="tick ${m?'major':'minor'}">${m?`<span class="tick-label">${i}</span>`:''}</div>`;}h+=`<div style="width:200px;flex-shrink:0;"></div>`;this.s.innerHTML=h;['mousedown','touchstart'].forEach(e=>this.w.addEventListener(e,this.start.bind(this),{passive:false}));['mousemove','touchmove'].forEach(e=>window.addEventListener(e,this.move.bind(this),{passive:false}));['mouseup','touchend'].forEach(e=>window.addEventListener(e,this.end.bind(this)));this.setVal(this.val);}start(e){this.drag=true;this.sx=this.gx(e);this.ct=new WebKitCSSMatrix(window.getComputedStyle(this.s).transform).m41;}move(e){if(!this.drag)return;let d=this.gx(e)-this.sx,nt=this.ct+d,min=-(this.max/this.step)*this.uW;if(nt>0)nt=0;if(nt<min)nt=min;this.s.style.transform=`translateX(${nt}px)`;let v=Math.round(Math.abs(nt)/this.uW)*this.step;if(v!==this.val){this.val=v;this.d.innerText=v;AudioEngine.playClick();if(navigator.vibrate)navigator.vibrate(5);}}end(){this.drag=false;}gx(e){return e.touches?e.touches[0].clientX:e.clientX;}setVal(v){this.val=v;this.d.innerText=v;this.s.style.transform=`translateX(${-(v/this.step)*this.uW}px)`;}}
 
     const weightRuler=new RulerPicker('rw-weight','rs-weight','val-weight',300,40,2.5);
     const repsRuler=new RulerPicker('rw-reps','rs-reps','val-reps',50,5,1);
-    const STD={male:{bench:[0.5,1.9],ohp:[0.35,1.15],dl:[1.0,3.0],sq:[0.75,2.75],curl:[0.2,0.75],pull:[0.7, 2.2]},female:{bench:[0.3,1.1],ohp:[0.25,0.75],dl:[0.75,2.1],sq:[0.5,1.8],curl:[0.1,0.45],pull:[0.4, 1.2]}};
+    
+    // Standards include Row and DL
+    const STD={
+        male:{bench:[0.5,2.0],ohp:[0.4,1.35],dl:[1.0,3.3],sq:[0.8,3.0],curl:[0.2,0.75],row:[0.6, 1.7]},
+        female:{bench:[0.3,1.2],ohp:[0.25,0.85],dl:[0.8,2.4],sq:[0.5,2.0],curl:[0.1,0.45],row:[0.4, 1.1]}
+    };
     let state={chest:{s:0,d:false},shoulder:{s:0,d:false},back:{s:0,d:false},legs:{s:0,d:false},arms:{s:0,d:false}};
     let currentPart='chest';
 
@@ -323,13 +360,25 @@
         
         const hud=document.getElementById('hud-res'),t=TEXTS[curLang];hud.classList.add('active');
         document.getElementById('res-val').innerText=Math.round(stdRM);
-        document.getElementById('res-sub').innerText=(ex.anchor==='pull'?(curLang==='cn'?'折算引体基准':'CONVERTED TO PULL'):`${t.sub_conv} ${ex.anchor.toUpperCase()}`);
-        let rawPct=(score-18)*1.22; if(gender==='female')rawPct*=1.5; let pct=Math.min(99.9,Math.max(1,rawPct)).toFixed(1);
-        let geoPct=Math.min(99.9,Math.max(1,pct*(0.9+Math.random()*0.2))).toFixed(1);
-        const locName=curLang==='cn'?locationCN:userLocation;
-        document.getElementById('res-rank').innerText=`${t.res_beat} ${pct}% ${gender==='female'?'(General Pop.)':t.res_lifters}`;
-        document.getElementById('res-geo-rank').innerText=`${curLang==='cn'?'在':'In'} [${locName}] ${curLang==='cn'?'排名前':'Top'} ${100-geoPct}%`;
-        document.getElementById('res-stars').innerText="★".repeat(getStarCount(score));
+        
+        // Dynamic Anchor Display
+        let anchorName = ex.anchor.toUpperCase();
+        if(ex.anchor === 'row') anchorName = curLang==='cn' ? '划船基准' : 'ROW BASE';
+        document.getElementById('res-sub').innerText=`${t.sub_conv} ${anchorName}`;
+        
+        let rawPct=(score-18)*1.22; if(gender==='female')rawPct*=1.5; 
+        let pct=Math.min(99.9,Math.max(1,rawPct)).toFixed(1);
+        
+        const rankText = `${t.res_beat} ${pct}% ${gender==='female'?'(General Pop.)':t.res_lifters}`;
+        document.getElementById('res-rank').innerText=rankText;
+        
+        let geoPct = Math.min(99.9, Math.max(1, pct * (0.9 + Math.random()*0.2))).toFixed(1);
+        const locName = curLang==='cn'? locationCN : userLocation;
+        document.getElementById('res-geo-rank').innerText = `${curLang==='cn'?'在':'In'} [${locName}] ${curLang==='cn'?'排名前':'Top'} ${100-geoPct}%`;
+
+        let starCount = getStarCount(score);
+        document.getElementById('res-stars').innerText="★".repeat(starCount);
+        
         if(Object.values(state).every(v=>v.d))setTimeout(showReport,1500);
     }
 
@@ -387,7 +436,7 @@
         document.getElementById('ai-plan-text').innerHTML = `<strong style="color:#fff">${plan.title}</strong><br>${plan.desc}`;
     }
 
-    // --- Feedback Functions (UPDATED) ---
+    // --- Feedback Functions ---
     function saveImage() {
         html2canvas(document.getElementById('capture-area'), { backgroundColor: '#000000' }).then(c => { 
             let l = document.createElement('a'); l.download = 'StrengthReport.jpg'; l.href = c.toDataURL(); l.click(); 
